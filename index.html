@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b1020">
+  <title>JUSTINE HUB OS v3</title>
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="assets/icons/icon-192.png">
+</head>
+<body>
+
+<!-- Boot Screen -->
+<div id="bootScreen" class="boot-screen">
+  <div class="boot-content">
+    <h1>JUSTINE HUB OS v3</h1>
+    <p>Developed by JUSTINE I. ROMERO</p>
+    <div class="loader"></div>
+  </div>
+</div>
+
+<!-- Lock Screen -->
+<div id="lockScreen" class="lock-screen hidden">
+  <div class="lock-card">
+    <h2>JUSTINE HUB OS</h2>
+    <p>Enter PIN</p>
+    <input type="password" id="pinInput" maxlength="6" placeholder="••••">
+    <button id="unlockBtn">Unlock</button>
+  </div>
+</div>
+
+<!-- Main App -->
+<div id="app">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="brand">
+      <h2>JUSTINE HUB</h2>
+      <span>OS v3</span>
+    </div>
+
+    <nav>
+      <button class="nav-btn active" data-page="dashboard">🏠 Dashboard</button>
+      <button class="nav-btn" data-page="apk">📦 APK Center</button>
+      <button class="nav-btn" data-page="notes">📝 Notes</button>
+      <button class="nav-btn" data-page="bookmarks">🔖 Bookmarks</button>
+      <button class="nav-btn" data-page="themes">🎨 Themes</button>
+      <button class="nav-btn" data-page="settings">⚙️ Settings</button>
+    </nav>
+
+    <div class="developer">
+      <small>Developed by</small>
+      <strong>JUSTINE I. ROMERO</strong>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+
+    <!-- Top Bar -->
+    <header class="topbar">
+      <div class="search-container">
+        <input id="searchInput" type="text" placeholder="Search apps, APKs, notes, bookmarks...">
+      </div>
+
+      <div class="top-actions">
+        <button id="notificationBtn">🔔</button>
+        <button id="themeToggle">🌙</button>
+        <button id="quickSettingsBtn">⚡</button>
+      </div>
+    </header>
+
+    <!-- Dashboard -->
+    <section id="dashboard" class="page active-page">
+
+      <!-- Wallpaper Section -->
+      <div class="wallpaper-card">
+        <div class="wallpaper-info">
+          <h3>Custom Background</h3>
+          <p>Choose your own photo, animated wallpaper, or theme</p>
+        </div>
+
+        <div class="wallpaper-actions">
+          <input type="file" id="wallpaperUpload" accept="image/*" hidden>
+          <button id="uploadWallpaperBtn">Upload Photo</button>
+          <button id="themeGalleryBtn">Theme Gallery</button>
+        </div>
+      </div>
+
+      <!-- Widgets -->
+      <div class="widget-grid">
+
+        <div class="widget" id="clockWidget">
+          <h4>Clock</h4>
+          <div id="clock" class="widget-value">00:00</div>
+          <div id="date" class="widget-sub">Loading...</div>
+        </div>
+
+        <div class="widget" id="weatherWidget">
+          <h4>Weather</h4>
+          <div id="weatherTemp" class="widget-value">--°C</div>
+          <div id="weatherLocation" class="widget-sub">Loading...</div>
+        </div>
+
+        <div class="widget" id="batteryWidget">
+          <h4>Battery</h4>
+          <div id="batteryLevel" class="widget-value">--%</div>
+          <div id="batteryStatus" class="widget-sub">Loading...</div>
+        </div>
+
+        <div class="widget" id="storageWidget">
+          <h4>Storage</h4>
+          <div id="storageUsed" class="widget-value">-- GB</div>
+          <div id="storageFree" class="widget-sub">Free space</div>
+        </div>
+
+      </div>
+
+      <!-- Favorites -->
+      <section class="section">
+        <div class="section-header">
+          <h3>Favorite Apps</h3>
+          <button id="editFavoritesBtn">Edit</button>
+        </div>
+
+        <div id="favoriteApps" class="app-grid"></div>
+      </section>
+
+      <!-- App Folders -->
+      <section class="section">
+        <div class="section-header">
+          <h3>Folders</h3>
+          <button id="createFolderBtn">New Folder</button>
+        </div>
+
+        <div id="folderGrid" class="folder-grid"></div>
+      </section>
+
+      <!-- All Apps -->
+      <section class="section">
+        <div class="section-header">
+          <h3>All Apps</h3>
+          <button id="sortAppsBtn">Sort</button>
+        </div>
+
+        <div id="appGrid" class="app-grid"></div>
+      </section>
+
+      <!-- Recent Apps -->
+      <section class="section">
+        <div class="section-header">
+          <h3>Recent Apps</h3>
+          <button id="clearRecentBtn">Clear</button>
+        </div>
+
+        <div id="recentApps" class="recent-grid"></div>
+      </section>
+
+    </section>
+
+    <!-- APK Center -->
+    <section id="apk" class="page">
+
+      <div class="page-header">
+        <h2>APK Center</h2>
+        <button id="refreshApkBtn">Refresh</button>
+      </div>
+
+      <div class="apk-categories">
+        <button class="apk-category active" data-category="social">Social</button>
+        <button class="apk-category" data-category="video">Video</button>
+        <button class="apk-category" data-category="productivity">Productivity</button>
+        <button class="apk-category" data-category="tools">Tools</button>
+        <button class="apk-category" data-category="games">Games</button>
+      </div>
+
+      <div id="apkGrid" class="apk-grid"></div>
+
+    </section>
+
+    <!-- Notes -->
+    <section id="notes" class="page">
+
+      <div class="page-header">
+        <h2>Notes</h2>
+        <button id="newNoteBtn">New Note</button>
+      </div>
+
+      <textarea id="notesArea" placeholder="Write your notes here..."></textarea>
+
+    </section>
+
+    <!-- Bookmarks -->
+    <section id="bookmarks" class="page">
+
+      <div class="page-header">
+        <h2>Bookmarks</h2>
+        <button id="addBookmarkBtn">Add Bookmark</button>
+      </div>
+
+      <div class="bookmark-inputs">
+        <input id="bookmarkName" type="text" placeholder="Website name">
+        <input id="bookmarkUrl" type="url" placeholder="https://example.com">
+      </div>
+
+      <div id="bookmarkList" class="bookmark-list"></div>
+
+    </section>
+
+    <!-- Themes -->
+    <section id="themes" class="page">
+
+      <div class="page-header">
+        <h2>Theme Gallery</h2>
+      </div>
+
+      <div class="theme-grid">
+
+        <div class="theme-card" data-theme="gaming">
+          <div class="theme-preview gaming"></div>
+          <span>Gaming</span>
+        </div>
+
+        <div class="theme-card" data-theme="anime">
+          <div class="theme-preview anime"></div>
+          <span>Anime</span>
+        </div>
+
+        <div class="theme-card" data-theme="nature">
+          <div class="theme-preview nature"></div>
+          <span>Nature</span>
+        </div>
+
+        <div class="theme-card" data-theme="minimal">
+          <div class="theme-preview minimal"></div>
+          <span>Minimal</span>
+        </div>
+
+        <div class="theme-card" data-theme="gradient">
+          <div class="theme-preview gradient"></div>
+          <span>Gradient</span>
+        </div>
+
+        <div class="theme-card" data-theme="animated">
+          <div class="theme-preview animated"></div>
+          <span>Animated</span>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- Settings -->
+    <section id="settings" class="page">
+
+      <div class="page-header">
+        <h2>Settings</h2>
+      </div>
+
+      <div class="settings-list">
+
+        <div class="setting-item">
+          <span>Dark / Light Mode</span>
+          <button id="toggleThemeSetting">Toggle</button>
+        </div>
+
+        <div class="setting-item">
+          <span>PIN Lock</span>
+          <button id="setPinBtn">Set PIN</button>
+        </div>
+
+        <div class="setting-item">
+          <span>Backup Settings</span>
+          <button id="backupBtn">Backup</button>
+        </div>
+
+        <div class="setting-item">
+          <span>Restore Settings</span>
+          <button id="restoreBtn">Restore</button>
+        </div>
+
+        <div class="setting-item">
+          <span>Install App (PWA)</span>
+          <button id="installBtn">Install</button>
+        </div>
+
+      </div>
+
+      <div class="about-card">
+        <h3>JUSTINE HUB OS v3</h3>
+        <p>Premium Android-style Web Launcher</p>
+        <strong>Developed by JUSTINE I. ROMERO</strong>
+      </div>
+
+    </section>
+
+  </main>
+
+</div>
+
+<!-- Quick Settings -->
+<div id="quickSettings" class="quick-settings hidden">
+
+  <div class="quick-card">
+
+    <h3>Quick Settings</h3>
+
+    <div class="quick-grid">
+
+      <button id="wifiToggle">📶 Wi-Fi</button>
+      <button id="bluetoothToggle">🟦 Bluetooth</button>
+      <button id="brightnessBtn">☀️ Brightness</button>
+      <button id="volumeBtn">🔊 Volume</button>
+      <button id="dndToggle">🔕 Do Not Disturb</button>
+      <button id="screenshotBtn">📸 Screenshot</button>
+
+    </div>
+
+    <button id="closeQuickSettings">Close</button>
+
+  </div>
+
+</div>
+
+<!-- Notifications -->
+<div id="notificationPanel" class="notification-panel hidden">
+
+  <div class="notification-header">
+    <h3>Notifications</h3>
+    <button id="clearNotifications">Clear</button>
+  </div>
+
+  <div id="notificationList" class="notification-list"></div>
+
+</div>
+
+<!-- AI Assistant -->
+<button id="aiAssistant" class="ai-assistant">
+  🤖
+</button>
+
+<!-- Scripts -->
+<script src="script.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,769 @@
+/* =====================================
+   JUSTINE HUB OS v3
+   Developed by JUSTINE I. ROMERO
+   Premium Glassmorphism Android UI
+===================================== */
+
+:root{
+  --bg:#0b1020;
+  --bg2:#141b33;
+  --card:rgba(22,28,52,.75);
+  --card-solid:#151d36;
+  --text:#ffffff;
+  --muted:#aeb6d3;
+  --primary:#5b7cff;
+  --secondary:#20c997;
+  --danger:#ff5d6c;
+  --warning:#ffd43b;
+  --border:rgba(255,255,255,.10);
+  --shadow:0 18px 50px rgba(0,0,0,.35);
+  --blur:blur(16px);
+  --radius:22px;
+}
+
+body.light{
+  --bg:#eef3ff;
+  --bg2:#dde7ff;
+  --card:rgba(255,255,255,.82);
+  --card-solid:#ffffff;
+  --text:#111827;
+  --muted:#5b6477;
+  --primary:#3b5bdb;
+  --border:rgba(17,24,39,.08);
+  --shadow:0 12px 35px rgba(17,24,39,.12);
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+html,body{
+  width:100%;
+  height:100%;
+  font-family:Inter,Arial,sans-serif;
+  background:
+    radial-gradient(circle at top left,#1d2b64 0%,transparent 40%),
+    radial-gradient(circle at bottom right,#0f9b8e 0%,transparent 35%),
+    var(--bg);
+  color:var(--text);
+  overflow:hidden;
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  backdrop-filter:var(--blur);
+  pointer-events:none;
+  opacity:.08;
+}
+
+/* Boot Screen */
+.boot-screen{
+  position:fixed;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(135deg,#0b1020,#182858,#0f9b8e);
+  z-index:9999;
+}
+
+.boot-content{
+  text-align:center;
+}
+
+.boot-content h1{
+  font-size:2rem;
+  margin-bottom:.5rem;
+}
+
+.boot-content p{
+  color:#dbe4ff;
+}
+
+.loader{
+  width:64px;
+  height:64px;
+  border-radius:50%;
+  border:4px solid rgba(255,255,255,.15);
+  border-top-color:#fff;
+  margin:22px auto 0;
+  animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+  to{transform:rotate(360deg);}
+}
+
+.hidden{
+  display:none!important;
+}
+
+/* Lock Screen */
+.lock-screen{
+  position:fixed;
+  inset:0;
+  background:rgba(5,8,18,.82);
+  backdrop-filter:blur(24px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:9000;
+}
+
+.lock-card{
+  width:min(92vw,360px);
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:28px;
+  padding:28px;
+  text-align:center;
+  box-shadow:var(--shadow);
+}
+
+.lock-card h2{
+  margin-bottom:.5rem;
+}
+
+.lock-card p{
+  color:var(--muted);
+  margin-bottom:1rem;
+}
+
+.lock-card input{
+  width:100%;
+  padding:14px 16px;
+  border-radius:16px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.08);
+  color:var(--text);
+  text-align:center;
+  font-size:1.2rem;
+  margin-bottom:1rem;
+}
+
+.lock-card button{
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:16px;
+  background:linear-gradient(135deg,var(--primary),#7c4dff);
+  color:#fff;
+  font-weight:700;
+}
+
+/* Layout */
+#app{
+  display:grid;
+  grid-template-columns:260px 1fr;
+  height:100vh;
+}
+
+/* Sidebar */
+.sidebar{
+  background:rgba(10,15,30,.55);
+  backdrop-filter:blur(22px);
+  border-right:1px solid var(--border);
+  padding:22px 16px;
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+}
+
+.brand h2{
+  color:#fff;
+}
+
+.brand span{
+  color:var(--muted);
+  font-size:.9rem;
+}
+
+.sidebar nav{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.nav-btn{
+  border:none;
+  background:transparent;
+  color:var(--text);
+  text-align:left;
+  padding:14px 16px;
+  border-radius:16px;
+  cursor:pointer;
+  transition:.25s;
+}
+
+.nav-btn:hover,
+.nav-btn.active{
+  background:rgba(91,124,255,.18);
+  border:1px solid rgba(91,124,255,.35);
+}
+
+.developer{
+  margin-top:auto;
+  padding:16px;
+  border-radius:18px;
+  background:rgba(255,255,255,.06);
+  border:1px solid var(--border);
+}
+
+.developer small{
+  color:var(--muted);
+}
+
+/* Main */
+.main-content{
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  padding:18px 22px;
+}
+
+.search-container{
+  flex:1;
+}
+
+.search-container input{
+  width:100%;
+  padding:14px 18px;
+  border-radius:18px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.08);
+  color:var(--text);
+  outline:none;
+}
+
+.top-actions{
+  display:flex;
+  gap:10px;
+}
+
+.top-actions button{
+  width:46px;
+  height:46px;
+  border:none;
+  border-radius:16px;
+  background:rgba(255,255,255,.08);
+  color:var(--text);
+}
+
+/* Pages */
+.page{
+  display:none;
+  overflow:auto;
+  padding:0 22px 24px;
+}
+
+.active-page{
+  display:block;
+}
+
+.page-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:18px;
+}
+
+.page-header button{
+  border:none;
+  background:var(--primary);
+  color:#fff;
+  padding:10px 16px;
+  border-radius:12px;
+}
+
+/* Wallpaper */
+.wallpaper-card{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  padding:22px;
+  border-radius:24px;
+  background:var(--card);
+  border:1px solid var(--border);
+  backdrop-filter:var(--blur);
+  box-shadow:var(--shadow);
+  margin-bottom:22px;
+}
+
+.wallpaper-actions{
+  display:flex;
+  gap:12px;
+}
+
+.wallpaper-actions button{
+  border:none;
+  padding:12px 16px;
+  border-radius:14px;
+  background:linear-gradient(135deg,var(--primary),#7c4dff);
+  color:#fff;
+}
+
+/* Widgets */
+.widget-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:18px;
+  margin-bottom:22px;
+}
+
+.widget{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:20px;
+  backdrop-filter:var(--blur);
+  box-shadow:var(--shadow);
+}
+
+.widget h4{
+  color:var(--muted);
+  margin-bottom:10px;
+}
+
+.widget-value{
+  font-size:2rem;
+  font-weight:800;
+}
+
+.widget-sub{
+  color:var(--muted);
+  margin-top:6px;
+}
+
+/* Sections */
+.section{
+  margin-bottom:26px;
+}
+
+.section-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:14px;
+}
+
+.section-header button{
+  border:none;
+  background:rgba(255,255,255,.08);
+  color:var(--text);
+  padding:8px 14px;
+  border-radius:12px;
+}
+
+/* Apps */
+.app-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(110px,1fr));
+  gap:16px;
+}
+
+.app-icon{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:18px 14px;
+  text-align:center;
+  cursor:pointer;
+  transition:.25s;
+  backdrop-filter:var(--blur);
+}
+
+.app-icon:hover{
+  transform:translateY(-6px);
+  border-color:rgba(91,124,255,.45);
+}
+
+.app-icon .icon{
+  font-size:2rem;
+  margin-bottom:10px;
+}
+
+.app-icon .name{
+  font-size:.9rem;
+}
+
+/* Folders */
+.folder-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+  gap:18px;
+}
+
+.folder{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:20px;
+  min-height:120px;
+}
+
+.folder-title{
+  font-weight:700;
+  margin-bottom:10px;
+}
+
+.folder-apps{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.folder-app{
+  width:42px;
+  height:42px;
+  border-radius:12px;
+  background:rgba(255,255,255,.08);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* APK Center */
+.apk-categories{
+  display:flex;
+  gap:10px;
+  overflow:auto;
+  margin-bottom:18px;
+}
+
+.apk-category{
+  border:none;
+  padding:10px 16px;
+  border-radius:999px;
+  background:rgba(255,255,255,.08);
+  color:var(--text);
+}
+
+.apk-category.active{
+  background:var(--primary);
+}
+
+.apk-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+  gap:18px;
+}
+
+.apk-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:18px;
+  backdrop-filter:var(--blur);
+}
+
+.apk-header{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:14px;
+}
+
+.apk-icon{
+  width:56px;
+  height:56px;
+  border-radius:16px;
+  background:rgba(255,255,255,.08);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:1.6rem;
+}
+
+.apk-name{
+  font-weight:700;
+}
+
+.apk-version{
+  color:var(--muted);
+  font-size:.85rem;
+}
+
+.apk-info{
+  color:var(--muted);
+  margin-bottom:14px;
+}
+
+.apk-card button{
+  width:100%;
+  border:none;
+  padding:12px;
+  border-radius:14px;
+  background:linear-gradient(135deg,var(--secondary),#00b894);
+  color:#081018;
+  font-weight:700;
+}
+
+/* Notes */
+#notesArea{
+  width:100%;
+  min-height:420px;
+  border:none;
+  outline:none;
+  border-radius:22px;
+  padding:20px;
+  background:var(--card);
+  color:var(--text);
+  resize:vertical;
+}
+
+/* Bookmarks */
+.bookmark-inputs{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-bottom:18px;
+}
+
+.bookmark-inputs input{
+  padding:14px 16px;
+  border-radius:16px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.08);
+  color:var(--text);
+}
+
+.bookmark-list{
+  display:grid;
+  gap:14px;
+}
+
+.bookmark-item{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:16px;
+  border-radius:18px;
+  background:var(--card);
+  border:1px solid var(--border);
+}
+
+/* Themes */
+.theme-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+  gap:18px;
+}
+
+.theme-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:14px;
+  cursor:pointer;
+}
+
+.theme-preview{
+  height:110px;
+  border-radius:16px;
+  margin-bottom:10px;
+}
+
+.gaming{background:linear-gradient(135deg,#4f46e5,#06b6d4);}
+.anime{background:linear-gradient(135deg,#ec4899,#8b5cf6);}
+.nature{background:linear-gradient(135deg,#16a34a,#84cc16);}
+.minimal{background:linear-gradient(135deg,#64748b,#cbd5e1);}
+.gradient{background:linear-gradient(135deg,#7c3aed,#2563eb,#06b6d4);}
+.animated{
+  background:linear-gradient(270deg,#7c3aed,#2563eb,#06b6d4);
+  background-size:300% 300%;
+  animation:gradientMove 6s ease infinite;
+}
+
+@keyframes gradientMove{
+  0%{background-position:0% 50%;}
+  50%{background-position:100% 50%;}
+  100%{background-position:0% 50%;}
+}
+
+/* Settings */
+.settings-list{
+  display:grid;
+  gap:14px;
+  margin-bottom:24px;
+}
+
+.setting-item{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:18px;
+  border-radius:20px;
+  background:var(--card);
+  border:1px solid var(--border);
+}
+
+.setting-item button{
+  border:none;
+  padding:10px 16px;
+  border-radius:12px;
+  background:var(--primary);
+  color:#fff;
+}
+
+.about-card{
+  padding:22px;
+  border-radius:22px;
+  background:var(--card);
+  border:1px solid var(--border);
+}
+
+/* Quick Settings */
+.quick-settings{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.45);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:5000;
+}
+
+.quick-card{
+  width:min(92vw,420px);
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:28px;
+  padding:22px;
+  backdrop-filter:blur(24px);
+}
+
+.quick-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+  margin:18px 0;
+}
+
+.quick-grid button,
+#closeQuickSettings{
+  border:none;
+  padding:14px;
+  border-radius:16px;
+  background:rgba(255,255,255,.08);
+  color:var(--text);
+}
+
+/* Notifications */
+.notification-panel{
+  position:fixed;
+  top:22px;
+  right:22px;
+  width:min(92vw,360px);
+  max-height:70vh;
+  overflow:auto;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:24px;
+  backdrop-filter:blur(24px);
+  z-index:4500;
+}
+
+.notification-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:16px;
+  border-bottom:1px solid var(--border);
+}
+
+.notification-list{
+  padding:16px;
+}
+
+.notification-item{
+  padding:14px;
+  border-radius:16px;
+  background:rgba(255,255,255,.06);
+  margin-bottom:12px;
+}
+
+/* AI Assistant */
+.ai-assistant{
+  position:fixed;
+  right:22px;
+  bottom:22px;
+  width:64px;
+  height:64px;
+  border:none;
+  border-radius:50%;
+  background:linear-gradient(135deg,#7c4dff,#5b7cff);
+  color:#fff;
+  font-size:1.4rem;
+  box-shadow:0 18px 40px rgba(91,124,255,.35);
+}
+
+/* Responsive */
+@media (max-width:1100px){
+  .widget-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media (max-width:768px){
+  #app{
+    grid-template-columns:1fr;
+  }
+
+  .sidebar{
+    display:none;
+  }
+
+  .topbar{
+    padding:14px;
+  }
+
+  .page{
+    padding:0 14px 20px;
+  }
+
+  .wallpaper-card{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .wallpaper-actions{
+    width:100%;
+    flex-direction:column;
+  }
+
+  .widget-grid{
+    grid-template-columns:1fr;
+  }
+
+  .bookmark-inputs{
+    grid-template-columns:1fr;
+  }
+
+  .app-grid{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .apk-grid{
+    grid-template-columns:1fr;
+  }
+
+  .theme-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .quick-card{
+    width:95vw;
+  }
+}
