@@ -3,6 +3,9 @@ name: Build Justine Hub APK
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build-apk:
     runs-on: ubuntu-latest
@@ -24,7 +27,9 @@ jobs:
 
       - name: Prepare website
         run: |
+          rm -rf www
           mkdir -p www
+
           cp index.html www/
 
           [ -f app.js ] && cp app.js www/ || true
@@ -43,8 +48,24 @@ jobs:
 
       - name: Create Android project
         run: |
-          npx cap init "Justine Hub" "com.justinehub.app" --web-dir www
+          npx cap init "JUSTINEHUB" "com.justinehub.app" --web-dir www
           npx cap add android
+          npx cap sync android
+
+      - name: Set Android app name
+        run: |
+          sed -i 's/<string name="app_name">.*<\/string>/<string name="app_name">JUSTINEHUB<\/string>/' \
+            android/app/src/main/res/values/strings.xml || true
+
+      - name: Set app icon
+        run: |
+          if [ -f justine-hub-logo.png ]; then
+            mkdir -p android/app/src/main/res/drawable
+            cp justine-hub-logo.png android/app/src/main/res/drawable/justine_hub_logo.png
+          fi
+
+      - name: Sync Capacitor
+        run: |
           npx cap sync android
 
       - name: Build APK
@@ -53,9 +74,20 @@ jobs:
           chmod +x gradlew
           ./gradlew assembleDebug --no-daemon --stacktrace
 
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
+      - name: Rename APK
+        run: |
+          cp android/app/build/outputs/apk/debug/app-debug.apk JUSTINEHUB.apk
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
         with:
-          name: Justine-Hub-APK
-          path: android/app/build/outputs/apk/debug/app-debug.apk
-          if-no-files-found: error
+          tag_name: justinehub-latest
+          name: JUSTINEHUB Latest
+          body: |
+            Latest JUSTINEHUB APK.
+
+            Download JUSTINEHUB.apk below.
+          files: JUSTINEHUB.apk
+          make_latest: true
+          prerelease: false
+          overwrite_files: true
