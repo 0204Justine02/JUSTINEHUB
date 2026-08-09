@@ -7,6 +7,9 @@ on:
       - main
       - master
 
+permissions:
+  contents: write
+
 jobs:
   build-apk:
     runs-on: ubuntu-latest
@@ -19,6 +22,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
+          cache: npm
 
       - name: Set up Java
         uses: actions/setup-java@v5
@@ -32,12 +36,24 @@ jobs:
           mkdir -p www
 
           cp index.html www/
-          cp app.js www/ || true
-          cp style.css www/ || true
-          cp manifest.json www/ || true
-          cp justine-hub-logo.png www/ || true
 
-          if [ -d "app" ]; then
+          if [ -f app.js ]; then
+            cp app.js www/
+          fi
+
+          if [ -f style.css ]; then
+            cp style.css www/
+          fi
+
+          if [ -f manifest.json ]; then
+            cp manifest.json www/
+          fi
+
+          if [ -f justine-hub-logo.png ]; then
+            cp justine-hub-logo.png www/
+          fi
+
+          if [ -d app ]; then
             cp -r app www/app
           fi
 
@@ -60,56 +76,45 @@ jobs:
           npx cap init "Justine Hub" "com.justinehub.app" --web-dir www
           npx cap add android
 
-      - name: Fix Kotlin dependencies
-        working-directory: android
-        run: |
-          cat >> build.gradle <<'EOF'
-
-          allprojects {
-              configurations.configureEach {
-                  resolutionStrategy.eachDependency {
-                      if (requested.group == "org.jetbrains.kotlin") {
-                          if (requested.name == "kotlin-stdlib-jdk7" ||
-                              requested.name == "kotlin-stdlib-jdk8" ||
-                              requested.name == "kotlin-stdlib") {
-                              useVersion("1.8.22")
-                              because("Align Kotlin standard library versions")
-                          }
-                      }
-                  }
-              }
-          }
-          EOF
-
-      - name: Force Kotlin stdlib alignment
-        working-directory: android
-        run: |
-          cat >> gradle.properties <<'EOF'
-
-          kotlin.stdlib.jdk.variants.version.alignment=true
-          EOF
-
       - name: Sync web application
         run: |
           npx cap sync android
-
-      - name: Show Kotlin dependencies
-        working-directory: android
-        run: |
-          ./gradlew :app:dependencies \
-            --configuration debugRuntimeClasspath \
-            | grep -E "kotlin-stdlib" || true
 
       - name: Build APK
         working-directory: android
         run: |
           chmod +x gradlew
-          ./gradlew clean assembleDebug --no-daemon
+          ./gradlew assembleDebug --no-daemon --stacktrace
 
       - name: Verify APK
         run: |
+          APK="android/app/build/outputs/apk/debug/app-debug.apk"
+
           echo "Checking APK..."
           ls -lah android/app/build/outputs/apk/debug/
+
+          if [ ! -f "$APK" ]; then
+            echo "APK was not created."
+            exit 1
+          fi
+
+          echo "APK successfully created:"
+          ls -lh "$APK"
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Justine-Hub-APK
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: justine-hub-${{ github.run_number }}
+          name: Justine Hub APK ${{ github.run_number }}
+          generate_release_notes: false
+          files: android/app/build/outputs/apk/debug/app-debug.apk          ls -lah android/app/build/outputs/apk/debug/
           test -f android/app/build/outputs/apk/debug/app-debug.apk
 
       - name: Upload Justine Hub APK
