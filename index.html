@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<meta name="theme-color" content="#10101a">
+<title>Justine Hub 3.0</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="lockScreen" class="screen">
+  <div class="glass lockBox">
+    <img class="logoImg" src="justine-hub-logo.png" alt="Justine Hub logo">
+    <h1>Justine Hub</h1><p id="lockSubtitle">Create your password</p>
+    <input id="passwordInput" type="password" placeholder="Password" autocomplete="off">
+    <button id="unlockBtn">Continue</button>
+    <div id="error"></div>
+  </div>
+</div>
+
+<div id="app" class="hidden">
+<header class="topbar">
+  <div class="brand"><img class="brandLogo" src="justine-hub-logo.png" alt="Justine Hub"><div><h1>Justine Hub</h1><span id="greeting">Offline personal hub</span></div></div>
+  <button class="iconBtn" onclick="showPage('settings')">⚙️</button>
+</header>
+
+<main id="pages">
+<section id="home" class="page active">
+  <div class="hero glass"><div><small>WELCOME BACK</small><h2 id="homeDate">Today</h2><p id="taskSummary">0 tasks today</p></div><img class="heroLogo" src="justine-hub-logo.png" alt="Justine Hub"></div>
+  <div class="grid2">
+    <button class="tile glass" onclick="showPage('calendar')">📅<b>Calendar</b><span id="homeCalendar">Tasks & events</span></button>
+    <button class="tile glass" onclick="showPage('music')">🎵<b>Music</b><span id="homeMusic">0 songs</span></button>
+    <button class="tile glass" onclick="showPage('gallery')">🖼️<b>Gallery</b><span id="homeGallery">0 photos</span></button>
+    <button class="tile glass" onclick="showPage('apps')">📱<b>Apps</b><span>App shortcuts</span></button>
+    <button class="tile glass" onclick="downloadApp()">⬇️<b>Download App</b><span>Get Justine Hub APK</span></button>
+    <button class="tile glass" onclick="showPage('notes')">📝<b>Notes</b><span>Quick notes</span></button>
+    <button class="tile glass" onclick="showPage('tools')">🧰<b>Tools</b><span>Calculator & links</span></button>
+  </div>
+  <div class="card glass"><h3>⚡ Quick actions</h3><div class="quick">
+    <button onclick="quickAddTask()">＋ Task</button><button onclick="document.getElementById('galleryInput').click()">＋ Photo</button><button onclick="document.getElementById('musicInput').click()">＋ Music</button>
+  </div></div>
+</section>
+
+<section id="calendar" class="page">
+  <div class="sectionHead"><h2>📅 Calendar</h2><button onclick="todayCalendar()">Today</button></div>
+  <div class="card glass calendarHead"><button onclick="changeMonth(-1)">‹</button><h3 id="monthTitle"></h3><button onclick="changeMonth(1)">›</button></div>
+  <div id="calendarGrid" class="calendarGrid"></div>
+  <div class="card glass"><div class="row"><h3 id="selectedDateTitle">Tasks</h3><button onclick="addTask()">＋ Add</button></div><div class="search"><span>🔎</span><input id="taskSearch" oninput="renderTasks()" placeholder="Search tasks..."></div><div id="taskList"></div></div>
+</section>
+
+<section id="music" class="page">
+  <div class="sectionHead"><h2>🎵 Music</h2><label class="primaryBtn">＋ Add music<input type="file" id="musicInput" accept="audio/*" multiple hidden></label></div>
+  <div class="card glass player"><div id="songTitle">No song selected</div><audio id="audio"></audio><input id="progress" type="range" min="0" max="100" value="0"><div class="playerBtns"><button onclick="previousSong()">⏮</button><button class="play" id="playBtn" onclick="togglePlay()">▶</button><button onclick="nextSong()">⏭</button><button onclick="toggleShuffle()">🔀</button></div><label>Volume <input id="volume" type="range" min="0" max="100" value="100"></label></div>
+  <div class="search glass"><span>🔎</span><input id="musicSearch" oninput="renderSongs()" placeholder="Search music..."></div><div id="playlist"></div><button class="danger wide" onclick="clearMusic()">Clear music library</button>
+</section>
+
+<section id="gallery" class="page">
+  <div class="sectionHead"><h2>🖼️ My Gallery</h2><label class="primaryBtn">＋ Add photos<input type="file" id="galleryInput" accept="image/*" multiple hidden></label></div>
+  <div class="search glass"><span>🔎</span><input id="gallerySearch" oninput="renderGallery()" placeholder="Search photos..."></div>
+  <div id="galleryGrid" class="galleryGrid"></div>
+</section>
+
+<section id="apps" class="page">
+  <div class="sectionHead"><h2>📱 My Apps</h2><button onclick="refreshApps()">Refresh</button></div>
+  <div class="search glass"><span>🔎</span><input id="appSearch" oninput="renderApps()" placeholder="Search apps..."></div>
+  <div id="appList" class="appList"></div>
+  <p class="hint">The Android APK can list launchable apps installed on your phone. A web-only preview cannot access the Android app list.</p>
+  <div class="card glass"><h3>⬇️ Justine Hub App</h3><p class="hint">Download the latest APK from your configured app link.</p><button class="primaryBtn" onclick="downloadApp()">⬇️ Download Justine Hub APK</button></div>
+</section>
+
+<section id="notes" class="page">
+  <div class="sectionHead"><h2>📝 Notes</h2><button onclick="newNote()">＋ New</button></div>
+  <div class="search glass"><span>🔎</span><input id="noteSearch" oninput="renderNotes()" placeholder="Search notes..."></div>
+  <div id="notesList"></div>
+  <div class="card glass"><input id="noteTitle" class="textInput" placeholder="Note title"><textarea id="notesText" placeholder="Write your note..."></textarea><div class="row"><button onclick="saveNote()">💾 Save</button><button class="danger" onclick="deleteCurrentNote()">Delete</button></div></div>
+</section>
+
+<section id="tools" class="page">
+  <h2>🧰 Tools</h2>
+  <div class="card glass"><h3>🧮 Calculator</h3><input id="calcDisplay" readonly value="0"><div class="calcButtons">
+  <button onclick="clearCalc()">AC</button><button onclick="delCalc()">⌫</button><button onclick="calcInput('%')">%</button><button onclick="calcInput('/')">÷</button>
+  <button onclick="calcInput('7')">7</button><button onclick="calcInput('8')">8</button><button onclick="calcInput('9')">9</button><button onclick="calcInput('*')">×</button>
+  <button onclick="calcInput('4')">4</button><button onclick="calcInput('5')">5</button><button onclick="calcInput('6')">6</button><button onclick="calcInput('-')">−</button>
+  <button onclick="calcInput('1')">1</button><button onclick="calcInput('2')">2</button><button onclick="calcInput('3')">3</button><button onclick="calcInput('+')">+</button>
+  <button onclick="calcInput('0')">0</button><button onclick="calcInput('.')">.</button><button onclick="calculate()" class="wideCalc">=</button></div></div>
+  <div class="card glass"><h3>🔗 My Links</h3><div class="row"><input id="linkName" class="textInput" placeholder="Name"><input id="linkURL" class="textInput" placeholder="https://..."><button onclick="addLink()">Add</button></div><div id="linkList"></div></div>
+</section>
+
+<section id="settings" class="page">
+  <h2>⚙️ Settings</h2>
+  <div class="card glass"><h3>🎨 Background</h3><div class="choices">
+    <button onclick="setBg('default')">Default</button><button onclick="setBg('purple')">Purple</button><button onclick="setBg('blue')">Blue</button><button onclick="setBg('sunset')">Sunset</button><button onclick="setBg('forest')">Forest</button><label class="primaryBtn">🖼 Custom<input type="file" id="bgInput" accept="image/*" hidden></label>
+  </div></div>
+  <div class="card glass"><h3>🎧 Chill background music</h3><div class="row"><button onclick="toggleBackgroundMusic()" id="bgMusicBtn">▶ Start chill music</button><button onclick="openSocial('youtube')">▶ YouTube</button><button onclick="openSocial('facebook')">📘 Facebook</button></div><label>Background volume <input id="bgVolume" type="range" min="0" max="100" value="85"></label><p class="hint">High-volume chill background music. YouTube/Facebook open in their app or browser when available.</p></div>
+  <div class="card glass"><h3>🔊 Click sound</h3><label class="switch"><input id="soundToggle" type="checkbox"><span>Play UI sounds</span></label></div>
+  <div class="card glass"><h3>🔐 Security</h3><button onclick="changePassword()">Change password</button><button onclick="lockHub()">Lock now</button></div>
+  <div class="card glass"><h3>📲 App download</h3><input id="appDownloadUrl" class="textInput" placeholder="APK download URL (https://...) or ./JustineHub.apk"><div class="row"><button onclick="saveAppDownloadUrl()">💾 Save link</button><button onclick="downloadApp()">⬇️ Download app</button></div><p class="hint">Set the APK link once. The Download App buttons will use it.</p></div>
+  <div class="card glass"><h3>💾 Backup</h3><button onclick="exportBackup()">Export data</button><label class="primaryBtn">Import data<input type="file" id="backupInput" accept=".json,application/json" hidden></label></div>
+  <div class="card glass"><h3>🎨 Theme</h3><button onclick="toggleTheme()">Toggle light/dark</button></div>
+</section>
+</main>
+
+<nav class="bottomNav">
+<button onclick="showPage('home')">⌂<span>Home</span></button><button onclick="showPage('calendar')">📅<span>Calendar</span></button><button onclick="showPage('music')">🎵<span>Music</span></button><button onclick="showPage('gallery')">🖼️<span>Gallery</span></button><button onclick="showPage('settings')">⚙️<span>Settings</span></button>
+</nav>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
