@@ -22,7 +22,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
 
       - name: Set up Java
         uses: actions/setup-java@v5
@@ -91,7 +90,6 @@ jobs:
           APK="android/app/build/outputs/apk/debug/app-debug.apk"
 
           echo "Checking APK..."
-          ls -lah android/app/build/outputs/apk/debug/
 
           if [ ! -f "$APK" ]; then
             echo "APK was not created."
@@ -101,7 +99,7 @@ jobs:
           echo "APK successfully created:"
           ls -lh "$APK"
 
-      - name: Upload APK artifact
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: Justine-Hub-APK
@@ -114,12 +112,4 @@ jobs:
           tag_name: justine-hub-${{ github.run_number }}
           name: Justine Hub APK ${{ github.run_number }}
           generate_release_notes: false
-          files: android/app/build/outputs/apk/debug/app-debug.apk          ls -lah android/app/build/outputs/apk/debug/
-          test -f android/app/build/outputs/apk/debug/app-debug.apk
-
-      - name: Upload Justine Hub APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: Justine-Hub-debug-apk
-          path: android/app/build/outputs/apk/debug/app-debug.apk
-          if-no-files-found: error
+          files: android/app/build/outputs/apk/debug/app-debug.apk
